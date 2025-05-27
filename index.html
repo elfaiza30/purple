@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<!-- filepath: c:\Users\elkar\OneDrive\Desktop\PFE1\Tache10-Dev system de notation purple team\index.html -->
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>KPIs & Système de Notation Purple Teaming</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main: #2b3a68;
+      --accent: #3da9fc;
+      --bg: #f7fafd;
+      --grey: #e9ecef;
+      --green: #3ac569;
+      --red: #d7263d;
+      --kpi-yes: #e6ffe6;
+      --kpi-no: #f8fafd;
+      --kpi-head: #e3e9f5;
+      --light-blue: #d9ebf5;
+    }
+    html { 
+      box-sizing: border-box;
+      scroll-behavior: smooth; /* Pour un défilement fluide */
+    }
+    *,*:before,*:after { box-sizing: inherit; }
+    body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      font-family: 'Roboto', Arial, sans-serif;
+      color: var(--main);
+    }
+    header {
+      background: var(--main);
+      color: #fff;
+      padding: 2.5rem 1rem 1.7rem 1rem;
+      text-align: center;
+      border-radius: 0 0 32px 32px;
+      box-shadow: 0 2px 16px rgba(44,60,125,0.07);
+    }
+    header h1 {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin: 0 0 0.4em 0;
+      letter-spacing: 1px;
+    }
+    header h2 {
+      font-size: 1.16rem;
+      font-weight: 400;
+      margin: 0 0 0.7em 0;
+      color: #a1d0fd;
+    }
+    .main-content {
+      display: flex;
+      max-width: 1300px;
+      margin: -3.5rem auto 2rem auto;
+      gap: 2.5rem;
+      min-height: 900px;
+    }
+    nav {
+      min-width: 220px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 24px rgba(44,60,125,0.06);
+      padding: 2.2rem 1.1rem 1.5rem 1.1rem;
+      position: sticky;
+      top: 1.7rem;
+      height: fit-content;
+      align-self: flex-start;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    nav ul li {
+      margin-bottom: 1.07em;
+    }
+    nav a {
+      color: var(--main);
+      text-decoration: none;
+      font-weight: 500;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.07em;
+      transition: color 0.2s, border-left 0.2s;
+      border-left: 3px solid transparent;
+      padding-left: 0.7em;
+      display: block;
+    }
+    nav a:hover, nav a.active {
+      color: var(--accent);
+      border-left: 3px solid var(--accent);
+    }
+    .container {
+      flex: 1;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 2px 32px rgba(44,60,125,0.10);
+      padding: 2.5rem 2.1rem 2.2rem 2.1rem;
+      position: relative;
+      min-width: 0;
+    }
+    @media (max-width: 1100px) {
+      .main-content { flex-direction: column; }
+      nav { position: static; min-width: 0; width: 100%; margin-bottom: 1.5em; }
+      .container { padding: 1.2rem 0.8rem; }
+    }
+    section {
+      margin-bottom: 2.7rem;
+      scroll-margin-top: 2rem; /* Pour le défilement avec ancrage */
+    }
+    section h3 {
+      font-family: 'Montserrat', Arial, sans-serif;
+      color: var(--main);
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 0.7em;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+    /* Modification pour centrer les titres numérotés et les afficher en bleu ciel */
+    section h3.numbered-title {
+      color: var(--accent);
+      text-align: center;
+      font-size: 1.23em;
+      margin-bottom: 1em;
+      margin-top: 2.4em;
+      letter-spacing: 0.2px;
+    }
+    section p, section ul {
+      line-height: 1.73;
+      font-size: 1.06rem;
+      color: #273052;
+      margin-top: 0;
+    }
+    section ul {
+      margin-bottom: 1.3em;
+    }
+    .kpi-table-container {
+      overflow-x: auto;
+    }
+    table.kpi-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.2rem;
+      margin-bottom: 2.2rem;
+      background: #fff;
+      font-size: 1.01rem;
+    }
+    .kpi-table th, .kpi-table td {
+      padding: 0.55em 0.8em;
+      border: 1px solid var(--grey);
+      text-align: center;
+    }
+    .kpi-table th {
+      background: var(--kpi-head);
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      color: var(--main);
+      font-size: 1.08em;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .kpi-table tr:nth-child(even) { background: #f7fafd; }
+    .kpi-table td.kpi-crit-oui { background: var(--kpi-yes); color: var(--green); font-weight: 600;}
+    .kpi-table td.kpi-crit-non { background: var(--kpi-no); color: #aaa; font-weight: 500;}
+    .kpi-table td, .kpi-table th { min-width: 90px; }
+    .kpi-table td.barreme { font-size: 0.98em; }
+    .kpi-table td.kpi-id { font-family: 'Montserrat', Arial, sans-serif; font-weight: 500; }
+    .kpi-table td.kpi-axe { font-weight: 500; color: var(--main);}
+    .tbl-caption {
+      margin-bottom: 0.7em;
+      font-size: 1.18em;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.2px;
+      text-align: left;
+      font-family: 'Montserrat', Arial, sans-serif;
+    }
+    .score-boxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.1em;
+      margin-bottom: 2.3em;
+    }
+    .score-box {
+      flex: 1 1 180px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 10px;
+      padding: 1.2em 1em 1.2em 1.2em;
+      box-shadow: 0 2px 12px rgba(61,169,252,0.08);
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.1em;
+      font-weight: 600;
+      margin-bottom: 0.2em;
+      text-align: center;
+      min-width: 170px;
+    }
+    .score-box label {
+      display: block;
+      font-size: 0.97em;
+      font-weight: 400;
+      color: #eaf6ff;
+      margin-bottom: 0.22em;
+      letter-spacing: 0.3px;
+    }
+    .score-box span { font-size: 1.5em; font-weight: 700;}
+    .bar-section {
+      margin: 2em 0 1.7em 0;
+    }
+    .bargraph {
+      background: var(--grey);
+      border-radius: 6px;
+      height: 20px;
+      margin-top: 0.5em;
+      margin-bottom: 0.8em;
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      max-width: 370px;
+      box-shadow: 0 1px 6px rgba(61,169,252,0.08);
+    }
+    .bargraph-fill {
+      background: linear-gradient(90deg, var(--main) 60%, var(--accent) 100%);
+      height: 100%;
+      border-radius: 6px 0 0 6px;
+      transition: width 1s;
+    }
+    .bargraph-label {
+      position: absolute;
+      left: 48%; top: -30px;
+      color: #273052;
+      font-size: 1.07em;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+      white-space: nowrap;
+    }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.3rem; }
+      .score-box { min-width: 120px; padding: 0.7em 0.4em; font-size: 0.9em; }
+      .main-content { gap: 0.5em; }
+      .container { padding: 0.7rem 0.2rem; }
+    }
+    blockquote {
+      border-left: 4px solid var(--accent);
+      margin: 1.3em 0;
+      padding: 0.7em 1.1em;
+      background: #f1f7fe;
+      font-style: italic;
+      color: #244b68;
+    }
+    .table-sm th, .table-sm td { padding: 0.35em 0.7em; font-size: 0.98em; }
+    .h4 { font-size: 1.15em; color: var(--main); font-weight: 700; margin: 1.3em 0 0.7em; }
+    .ponderation-section h3 {
+      color: var(--accent);
+      font-size: 1.23em;
+      margin-bottom: 1em;
+      margin-top: 2.4em;
+      text-align: center;
+      letter-spacing: 0.2px;
+    }
+    .ponderation-section {
+      margin-top: 3.5em;
+      margin-bottom: 2.5em;
+      border-top: 2px solid var(--grey);
+      padding-top: 1.7em;
+    }
+    .formula {
+      display: block;
+      background: #f6fafd;
+      border-left: 4px solid var(--accent);
+      padding: 0.35em 1em;
+      margin: 1em 0 1em 0;
+      font-family: 'Consolas', 'Menlo', monospace;
+      font-size: 1.05em;
+      color: #2b3a68;
+      white-space: pre-line;
+    }
+    .step-title {
+      color: #2b3a68;
+      font-weight: 600;
+      margin-top: 1.15em;
+    }
+    .substeps {
+      margin-left: 1.5em;
+      font-size: 0.97em;
+    }
+    .detailed-table th {
+      background-color: var(--main);
+      color: white;
+      text-align: center;
+      font-weight: 600;
+    }
+    .detailed-table tr:nth-child(odd) td {
+      background-color: var(--light-blue);
+    }
+    .detailed-table tr:nth-child(even) td {
+      background-color: #f7fafd;
+    }
+    .detailed-table tr td:first-child {
+      font-weight: 600;
+    }
+    .critere-oui {
+      color: var(--green);
+      font-weight: 600;
+    }
+    .critere-non {
+      color: #999;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>KPIs &amp; Système de Notation Purple Teaming</h1>
+    <h2>Cadre d'évaluation de la maturité SOC – Elfaiza Elkarie – Mai 2025</h2>
+  </header>
+  <div class="main-content">
+    <nav>
+      <ul>
+        <li><a href="#objectif" class="nav-link">Objectifs</a></li>
+        <li><a href="#template" class="nav-link">Présentation de la template</a></li>
+        <li><a href="#indicateurs" class="nav-link">Champs &amp; Indicateurs</a></li>
+        <li><a href="#integration" class="nav-link">Intégration dans l'évaluation globale</a></li>
+        <li><a href="#notation" class="nav-link">Système de notation</a></li>
+        <li><a href="#ponderation" class="nav-link">Pondération &amp; calcul</a></li>
+        <li><a href="#maturite" class="nav-link">Niveaux de maturité</a></li>
+        <li><a href="#ponderationpurple" class="nav-link">Pondération Purple Team</a></li>
+      </ul>
+    </nav>
+    <div class="container">
+      
+      <!-- Section Objectifs -->
+      <section id="objectif">
+        <h3 class="numbered-title">Objectifs</h3>
+        <p>Cette section présente les objectifs du système de notation Purple Teaming et son intégration dans l'évaluation globale de la maturité du SOC.</p>
+        <p>Le Purple Teaming est une approche collaborative qui combine les compétences des Red Teams (simulation d'attaques) et des Blue Teams (défense) pour améliorer la sécurité globale de l'organisation.</p>
+      </section>
+
+      <!-- Section Présentation de la template -->
+      <section id="template">
+        <h3 class="numbered-title">Présentation de la template</h3>
+        <p>Cette template a été conçue pour standardiser l'évaluation des exercices de Purple Teaming et intégrer les résultats dans un cadre d'évaluation de maturité SOC cohérent.</p>
+        <p>Elle permet d'analyser les performances selon plusieurs axes clés (couverture, détection, réponse et collaboration) et de quantifier précisément le niveau de maturité des équipes.</p>
+      </section>
+
+      <!-- Section Champs & Indicateurs -->
+      <section id="indicateurs">
+        <h3 class="numbered-title">Champs &amp; Indicateurs</h3>
+        <p>Les indicateurs de performance utilisés dans cette méthodologie sont organisés selon quatre axes principaux qui reflètent les capacités complètes d'un SOC face à des attaques simulées.</p>
+        <p>Chaque indicateur est conçu pour mesurer un aspect spécifique des capacités défensives et de la maturité opérationnelle.</p>
+      </section>
+
+      <!-- Section Intégration dans l'évaluation globale -->
+      <section id="integration">
+        <h3 class="numbered-title">Intégration dans l'évaluation globale</h3>
+        <p>Les résultats des exercices Purple Team s'intègrent dans l'évaluation globale de maturité du SOC, en complément des autres domaines d'évaluation comme la gouvernance, les processus et les technologies.</p>
+        <p>Cette composante représente une part importante de l'évaluation car elle mesure les capacités opérationnelles réelles face à des menaces simulées.</p>
+      </section>
+      
+      <!-- Section Système de notation Purple Teaming -->
+      <section id="notation">
+        <h3 class="numbered-title">Système de notation Purple Teaming</h3>
+        <div class="h4">Axes d'évaluation</div>
+        <table class="kpi-table table-sm">
+          <thead>
+            <tr><th>Axe</th><th>Ce qu'on mesure</th><th>Pourquoi c'est important</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Couverture</td><td>Est-ce qu'on a bien testé les bonnes choses ?</td><td>Cela montre la portée des tests</td></tr>
+            <tr><td>Détection</td><td>Est-ce que le SOC voit les attaques ?</td><td>La visibilité est la base</td></tr>
+            <tr><td>Réponse</td><td>Est-ce que le SOC agit vite et bien ?</td><td>Réduire l'impact de l'attaque</td></tr>
+            <tr><td>Collaboration</td><td>Est-ce que tout est documenté et suivi ?</td><td>Nécessaire pour s'améliorer</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Section KPIs détaillés avec formules et explications -->
+        <div class="h4">Indicateurs détaillés de performance (KPIs)</div>
+        <table class="kpi-table table-sm">
+          <thead>
+            <tr>
+              <th>Catégorie</th>
+              <th>KPI</th>
+              <th>Méthode de mesure (Formule)</th>
+              <th>Explication et objectif visé</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2">Couverture</td>
+              <td>% Techniques MITRE testées</td>
+              <td>Nb techniques testées / Nb techniques cibles</td>
+              <td>Permet de mesurer la couverture des vecteurs d'attaque en fonction des objectifs définis. Plus le pourcentage est élevé, plus le test est représentatif.</td>
+            </tr>
+            <tr>
+              <td>Tactiques couvertes</td>
+              <td>Nb tactiques couvertes / 14 (tactiques MITRE ATT&CK)</td>
+              <td>Indique l'étendue de l'évaluation sur le cycle complet de l'attaque (Initial Access & Impact). Permet une cartographie stratégique des tests.</td>
+            </tr>
+            <tr>
+              <td rowspan="3">Détection</td>
+              <td>Taux de détection brute</td>
+              <td>Nb événements détectés / Nb actions exécutées par la Red Team</td>
+              <td>Mesure la visibilité technique du SOC : capacité à enregistrer des événements malveillants dans les logs ou SIEM.</td>
+            </tr>
+            <tr>
+              <td>Temps moyen de détection (MTTD)</td>
+              <td>Moyenne(Heure détection – Heure attaque)</td>
+              <td>Évalue la réactivité technique des systèmes et analystes. Plus le MTTD est court, plus la menace est détectée rapidement.</td>
+            </tr>
+            <tr>
+              <td>Précision détection</td>
+              <td>TP/(TP+FP)</td>
+              <td>TP = True Positives (alertes justifiées), FP = False Positives (alertes injustifiées). Mesure la qualité des alertes générées.</td>
+            </tr>
+            <tr>
+              <td rowspan="2">Réponse</td>
+              <td>Temps de réponse (MTTR)</td>
+              <td>Moyenne(Heure containment – Heure alerte)</td>
+              <td>Évalue la réactivité opérationnelle du SOC une fois l'alerte levée. Réduit les risques d'escalade.</td>
+            </tr>
+            <tr>
+              <td>Actions manquées</td>
+              <td>Nb étapes non détectées ou non traitées</td>
+              <td>Compte les actions Red Team restées sans réponse. Mesure les failles dans le traitement opérationnel ou la couverture.</td>
+            </tr>
+            <tr>
+              <td rowspan="2">Collaboration</td>
+              <td>Scénarios documentés</td>
+              <td>Nb fiches renseignées / Nb scénarios exécutés</td>
+              <td>Évalue la rigueur et profondeur de documentation. Reflète la capacité à capitaliser les tests et les audits ou les réutilisations.</td>
+            </tr>
+            <tr>
+              <td>Recommandations appliquées</td>
+              <td>Nb recommandations appliquées / Nb proposées</td>
+              <td>Mesure la mise en œuvre des actions correctrices après test. Indicateur de la dynamique d'amélioration collaborative.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Pondération des axes et formules détaillées -->
+      <section id="ponderation">
+        <h3 class="numbered-title">Pondération des axes et calcul du score</h3>
+        <table class="kpi-table table-sm" style="max-width:490px;">
+          <thead>
+            <tr><th>Axe</th><th>Poids (%)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Couverture</td><td>25</td></tr>
+            <tr><td>Détection</td><td>30</td></tr>
+            <tr><td>Réponse</td><td>25</td></tr>
+            <tr><td>Collaboration</td><td>20</td></tr>
+          </tbody>
+        </table>
+        <p>Ces poids reflètent l'importance relative de chaque domaine dans la réalité opérationnelle d'un SOC.</p>
+      </section>
+
+      <!-- Indicateurs par axe : détail complet des calculs -->
+      <section>
+        <h3 class="numbered-title">Indicateurs par axe</h3>
+
+        <!-- Couverture -->
+        <div class="h4">A. Couverture (25%)</div>
+        <table class="kpi-table table-sm" style="max-width:550px;">
+          <thead>
+            <tr>
+              <th>Indicateur</th>
+              <th>Formule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>% Techniques MITRE testées</td>
+              <td>Nb testées / Nb cibles × 100</td>
+            </tr>
+            <tr>
+              <td>% Tactiques ATT&CK couvertes</td>
+              <td>Nb tactiques couvertes / 14 × 100</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="step-title">Étapes :</div>
+        <div class="substeps">
+          1. Calculer le % Techniques MITRE testées<br>
+          <span class="formula">Techniques_Score = (Nb techniques testées / Nb techniques cibles) × 100</span>
+          2. Calculer le % Tactiques ATT&CK couvertes<br>
+          <span class="formula">Tactics_Score = (Nb tactiques couvertes / 14) × 100</span>
+          3. Moyenne des deux :<br>
+          <span class="formula">C = (Techniques_Score + Tactics_Score) / 2</span>
+        </div>
+
+        <!-- Détection -->
+        <div class="h4">B. Détection (30%)</div>
+        <table class="kpi-table table-sm" style="max-width:550px;">
+          <thead>
+            <tr>
+              <th>Indicateur</th>
+              <th>Formule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Taux de détection</td>
+              <td>Nb événements détectés / Nb actions Red Team × 100</td>
+            </tr>
+            <tr>
+              <td>Précision des alertes</td>
+              <td>TP / (TP + FP) × 100</td>
+            </tr>
+            <tr>
+              <td>Temps de détection</td>
+              <td>MTTD (en minutes), conversion en score</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="step-title">Étapes :</div>
+        <div class="substeps">
+          1. Calculer le Taux de détection brute<br>
+          <span class="formula">Detection_Rate = (Nb événements détectés / Nb actions Red Team) × 100</span>
+          2. Calculer la Précision des alertes<br>
+          <span class="formula">Precision = (TP / (TP + FP)) × 100</span>
+          3. Évaluer le temps moyen de détection (MTTD) :<br>
+          <span class="formula">
+            &lt; 5 min → 100<br>
+            5–15 min → 80<br>
+            15–30 min → 60<br>
+            30–60 min → 40<br>
+            ≥ 60 min → 20
+          </span>
+          4. Moyenne des trois :<br>
+          <span class="formula">D = (Detection_Rate + Precision + MTTD_Score) / 3</span>
+        </div>
+
+        <!-- Réponse -->
+        <div class="h4">C. Réponse (25%)</div>
+        <table class="kpi-table table-sm" style="max-width:550px;">
+          <thead>
+            <tr>
+              <th>Indicateur</th>
+              <th>Formule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Temps de réponse (MTTR)</td>
+              <td>Containment – détection → barème similaire à MTTD</td>
+            </tr>
+            <tr>
+              <td>% Actions Blue non manquées</td>
+              <td>(1 – Nb non traitées / Nb actions Red Team) × 100</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="step-title">Étapes :</div>
+        <div class="substeps">
+          1. Évaluer le temps moyen de réponse (MTTR) :<br>
+          <span class="formula">
+            &lt; 10 min → 100<br>
+            10–30 min → 80<br>
+            30–60 min → 60<br>
+            ≥ 60 min → 40
+          </span>
+          2. Calculer le % d'actions Red Team traitées<br>
+          <span class="formula">Missed_Score = (1 – Nb actions manquées / Nb actions totales) × 100</span>
+          3. Moyenne des deux :<br>
+          <span class="formula">R = (MTTR_Score + Missed_Score) / 2</span>
+        </div>
+
+        <!-- Collaboration -->
+        <div class="h4">D. Collaboration (20%)</div>
+        <table class="kpi-table table-sm" style="max-width:550px;">
+          <thead>
+            <tr>
+              <th>Indicateur</th>
+              <th>Formule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Documentation des scénarios</td>
+              <td>Nb fiches complètes / Nb tests exécutés × 100</td>
+            </tr>
+            <tr>
+              <td>Recommandations appliquées</td>
+              <td>Nb appliquées / Nb proposées × 100</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="step-title">Étapes :</div>
+        <div class="substeps">
+          1. Calculer le % de scénarios documentés<br>
+          <span class="formula">Documentation_Score = (Nb fiches complètes / Nb scénarios exécutés) × 100</span>
+          2. Calculer le % de recommandations appliquées<br>
+          <span class="formula">Reco_Score = (Nb recos appliquées / Nb recos proposées) × 100</span>
+          3. Moyenne des deux :<br>
+          <span class="formula">Co = (Documentation_Score + Reco_Score) / 2</span>
+        </div>
+      </section>
+
+      <!-- Calcul du score global -->
+      <section>
+        <h3 class="numbered-title">Calcul du Score Global</h3>
+        <span class="formula">Score global = 0.25 × C + 0.30 × D + 0.25 × R + 0.20 × Co</span>
+        <ul>
+          <li>C = score Couverture</li>
+          <li>D = score Détection</li>
+          <li>R = score Réponse</li>
+          <li>Co = score Collaboration</li>
+        </ul>
+      </section>
+
+      <!-- Niveaux de maturité -->
+      <section id="maturite">
+        <h3 class="numbered-title">Niveau de maturité final</h3>
+        <table class="kpi-table" style="max-width:550px;margin:0;">
+          <thead>
+            <tr>
+              <th>Score (%)</th>
+              <th>Niveau</th>
+              <th>Signification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0–20</td><td>0</td><td>Faible</td></tr>
+            <tr><td>21–40</td><td>1</td><td>Émergent</td></tr>
+            <tr><td>41–60</td><td>2</td><td>Structurant</td></tr>
+            <tr><td>61–80</td><td>3</td><td>Stabilisé</td></tr>
+            <tr><td>81–90</td><td>4</td><td>Piloté</td></tr>
+            <tr><td>91–100</td><td>5</td><td>Optimisé (exemplarité SOC)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Tableau détaillé basé sur l'image -->
+      <section class="ponderation-section" id="ponderationpurple">
+        <h3 class="numbered-title">Pondération Purple Team</h3>
+        <div class="kpi-table-container">
+          <table class="kpi-table detailed-table">
+            <thead>
+              <tr>
+                <th>ID Axe</th>
+                <th>Axe</th>
+                <th>KPI</th>
+                <th>Poids KPI (%)</th>
+                <th>Poids Axe (%)</th>
+                <th>Barème (%) (seuils min/max ou note)</th>
+                <th>Criticité</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A1</td>
+                <td>Couverture</td>
+                <td>% Techniques MITRE testées</td>
+                <td>50</td>
+                <td>25</td>
+                <td>0-100</td>
+                <td class="critere-oui">Oui</td>
+              </tr>
+              <tr>
+                <td>A2</td>
+                <td>Couverture</td>
+                <td>% Tactiques MITRE couvertes</td>
+                <td>50</td>
+                <td>25</td>
+                <td>0-100</td>
+                <td class="critere-non">Non</td>
+              </tr>
+              <tr>
+                <td>B1</td>
+                <td>Détection</td>
+                <td>Taux de détection</td>
+                <td>33</td>
+                <td>30</td>
+                <td>0-100</td>
+                <td class="critere-oui">Oui</td>
+              </tr>
+              <tr>
+                <td>B2</td>
+                <td>Détection</td>
+                <td>Précision des alertes</td>
+                <td>33</td>
+                <td>30</td>
+                <td>0-100</td>
+                <td class="critere-oui">Oui</td>
+              </tr>
+              <tr>
+                <td>B3</td>
+                <td>Détection</td>
+                <td>Temps moyen de détection (MTTD)</td>
+                <td>33</td>
+                <td>30</td>
+                <td>&lt;5min = 100, >60min = 20</td>
+                <td class="critere-oui">Oui</td>
+              </tr>
+              <tr>
+                <td>C1</td>
+                <td>Réponse</td>
+                <td>Temps moyen de réponse (MTTR)</td>
+                <td>50</td>
+                <td>25</td>
+                <td>&lt;10min = 100, >60min = 40</td>
+                <td class="critere-oui">Oui</td>
+              </tr>
+              <tr>
+                <td>C2</td>
+                <td>Réponse</td>
+                <td>% Actions Red Team traitées</td>
+                <td>50</td>
+                <td>25</td>
+                <td>0-100</td>
+                <td class="critere-oui">Oui</td>
+              </tr>
+              <tr>
+                <td>D1</td>
+                <td>Collaboration</td>
+                <td>Scénarios documentés</td>
+                <td>50</td>
+                <td>20</td>
+                <td>0-100</td>
+                <td class="critere-non">Non</td>
+              </tr>
+              <tr>
+                <td>D2</td>
+                <td>Collaboration</td>
+                <td>Recommandations appliquées</td>
+                <td>50</td>
+                <td>20</td>
+                <td>0-100</td>
+                <td class="critere-non">Non</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <footer style="margin-top:2.5em;text-align:center;color:#aaa;font-size:0.98em;">
+        &copy; Elfaiza Elkarie – Purple Teaming Methodology – Mai 2025
+      </footer>
+    </div>
+  </div>
+
+  <!-- Script pour le menu interactif -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Sélectionner tous les liens du menu
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      // Ajouter un gestionnaire d'événements à chaque lien
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          // Supprimer la classe 'active' de tous les liens
+          navLinks.forEach(l => l.classList.remove('active'));
+          
+          // Ajouter la classe 'active' au lien cliqué
+          this.classList.add('active');
+          
+          // Mettre à jour l'URL avec le hash sans recharger la page
+          history.pushState(null, null, this.getAttribute('href'));
+        });
+      });
+      
+      // Marquer le lien actif en fonction de l'URL au chargement
+      const currentHash = window.location.hash;
+      if (currentHash) {
+        const activeLink = document.querySelector(`a[href="${currentHash}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+        }
+      }
+      
+      // Gérer le défilement et mettre à jour le lien actif
+      function updateActiveLink() {
+        const scrollPosition = window.scrollY;
+        
+        // Trouver la section actuellement visible
+        document.querySelectorAll('section').forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          
+          if (scrollPosition >= sectionTop - 100 && 
+              scrollPosition < sectionTop + sectionHeight - 100) {
+            const id = section.getAttribute('id');
+            if (id) {
+              // Mettre à jour les classes active
+              navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${id}`) {
+                  link.classList.add('active');
+                }
+              });
+            }
+          }
+        });
+      }
+      
+      // Mettre à jour le lien actif lors du défilement
+      window.addEventListener('scroll', updateActiveLink);
+      
+      // Exécuter une fois au chargement
+      updateActiveLink();
+    });
+  </script>
+</body>
+</html>
